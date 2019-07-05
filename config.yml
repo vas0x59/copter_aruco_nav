@@ -1,0 +1,8 @@
+%YAML:1.0
+---
+calibration_file: "./log.yml"
+map: "./map.txt"
+map_jpeg: "./map.jpg"
+map_jpeg_size: 1000
+dictinary: 2
+cam_id: 2
