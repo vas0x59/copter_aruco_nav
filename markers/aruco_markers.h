@@ -1,7 +1,6 @@
 #ifndef ARUCOMARKERS_H_
 #define ARUCOMARKERS_H_
 
-
 #include <iostream>
 #include <vector>
 #include "opencv2/opencv.hpp"
@@ -17,7 +16,10 @@
 //     std::vector<cv::Point2f> points;
 // };
 using namespace cv;
+// using namespace markers;
 
+namespace markers
+{
 
 struct ArucoMarkerMap
 {
@@ -44,6 +46,7 @@ public:
     bool detect(cv::Mat image, cv::Mat &objPoints, cv::Mat &imgPoints);
     bool detect(cv::Mat image, cv::Mat &objPoints, cv::Mat &imgPoints, cv::Mat &outImage);
     void loadMap(std::string);
+
 private:
     std::vector<int> _ids_to_detect;
     std::vector<ArucoMarkerMap> _markers_map;
@@ -52,8 +55,6 @@ private:
     std::vector<std::vector<cv::Point2f>> _corners;
     void _getBoardObjectAndImagePoints(const Ptr<aruco::Board> &board, InputArrayOfArrays detectedCorners,
                                        InputArray detectedIds, OutputArray objPoints, OutputArray imgPoints);
-
-    // std::vector<ArucoMark
-    // std::vector<>
 };
+} // namespace Markers
 #endif

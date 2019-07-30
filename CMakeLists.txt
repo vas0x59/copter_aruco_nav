@@ -13,7 +13,7 @@ else()
     add_definitions("-std=c++11 -Wall -Wextra -Werror")
 endif()
 
-find_package(MAVSDK REQUIRED)
+find_package( MAVSDK REQUIRED )
 
 find_package( OpenCV REQUIRED )
 
@@ -21,6 +21,10 @@ add_executable(
     offboard_vpe offboard_vpe.cpp
 )
 
+add_library(${PROJECT_NAME}
+  markers/aruco_markers.cpp
+  markers/solver.cpp
+)
 
 target_link_libraries(offboard_vpe
     MAVSDK::mavsdk_action

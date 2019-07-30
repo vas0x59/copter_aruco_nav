@@ -8,21 +8,25 @@
 // #include "markers.h"
 #include "solver.h"
 
-
 using namespace cv;
 using namespace std;
-
-Solver::Solver() {
+using namespace markers;
+// namespace markers
+// {
+Solver::Solver()
+{
     _R_flip = R_flip_gen(1, -1, -1);
 }
 // Solver::Solver(Mat r_flip) {
 //     _R_flip = r_flip;
 // }
-void Solver::set_camera_conf(Mat cameraMatrix, Mat distCoeffs){
+void Solver::set_camera_conf(Mat cameraMatrix, Mat distCoeffs)
+{
     _cameraMatrix = cameraMatrix;
     _distCoeffs = distCoeffs;
 }
-void Solver::load_camera_conf(String path){
+void Solver::load_camera_conf(String path)
+{
     FileStorage fs2(path, FileStorage::READ);
     // FileStorage fs3();
     Mat cameraMatrix, distCoeffs;
@@ -35,9 +39,10 @@ void Solver::load_camera_conf(String path){
     // return false;
 }
 
-bool Solver::solve(Mat objPoints, Mat imgPoints, Pose &pose, bool useExtrinsicGuess){
+bool Solver::solve(Mat objPoints, Mat imgPoints, Pose &pose, bool useExtrinsicGuess)
+{
     // std::cout << "cam mat: " << _cameraMatrix << " dist coeff" << _cameraMatrix << "\n";
-	if (objPoints.total() == 0) // 0 of the detected markers in board
+    if (objPoints.total() == 0) // 0 of the detected markers in board
         return false;
 
     // std::cout << "objPoints: " << objPoints << std::endl;
@@ -47,7 +52,8 @@ bool Solver::solve(Mat objPoints, Mat imgPoints, Pose &pose, bool useExtrinsicGu
     cv::Vec3d _tvec, _rvec;
 
     solvePnP(objPoints, imgPoints, _cameraMatrix, _distCoeffs, _rvec, _tvec, useExtrinsicGuess);
-    if (((int)objPoints.total() / 4) > 0){
+    if (((int)objPoints.total() / 4) > 0)
+    {
         // aruco::drawAxis(image, _cameraMatrix, _distCoeffs, _rvec,
         //       _tvec, 0.2);
         Mat pos_camera = Mat(3, 3, CV_64F, cvScalar(0.));
@@ -70,13 +76,14 @@ bool Solver::solve(Mat objPoints, Mat imgPoints, Pose &pose, bool useExtrinsicGu
         pose.pose.z = pos_camera.at<double>(0, 2);
         return true;
     }
-    else{
+    else
+    {
         return false;
     }
     // divide by four since all the four corners are concatenated in the array for each marker
-
 }
-bool Solver::solve(Mat objPoints, Mat imgPoints, Pose &pose, Mat &image, bool useExtrinsicGuess){
+bool Solver::solve(Mat objPoints, Mat imgPoints, Pose &pose, Mat &image, bool useExtrinsicGuess)
+{
     // std::cout << "cam mat: " << _cameraMatrix << " dist coeff" << _cameraMatrix << "\n";
     if (objPoints.total() == 0) // 0 of the detected markers in board
         return false;
@@ -88,9 +95,10 @@ bool Solver::solve(Mat objPoints, Mat imgPoints, Pose &pose, Mat &image, bool us
     cv::Vec3d _tvec, _rvec;
 
     solvePnP(objPoints, imgPoints, _cameraMatrix, _distCoeffs, _rvec, _tvec, useExtrinsicGuess);
-    if (((int)objPoints.total() / 4) > 0){
+    if (((int)objPoints.total() / 4) > 0)
+    {
         aruco::drawAxis(image, _cameraMatrix, _distCoeffs, _rvec,
-              _tvec, 0.2);
+                        _tvec, 0.2);
         Mat pos_camera = Mat(3, 3, CV_64F, cvScalar(0.));
         Mat R_ct, R_tc;
         cv::Rodrigues(_rvec, R_ct);
@@ -111,9 +119,10 @@ bool Solver::solve(Mat objPoints, Mat imgPoints, Pose &pose, Mat &image, bool us
         pose.pose.z = pos_camera.at<double>(0, 2);
         return true;
     }
-    else{
+    else
+    {
         return false;
     }
     // divide by four since all the four corners are concatenated in the array for each marker
-
 }
+// } // namespace Markers

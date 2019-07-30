@@ -14,7 +14,6 @@
 // struct Marker {
 //     int id;
 
-
 // };
 using namespace std;
 using namespace cv;
@@ -24,10 +23,14 @@ using namespace cv;
 //     float y;
 //     float z;
 // };
-void PRINT_DEBUG(string str){
-	cout << str << endl;
-}
+// using namespace markers;
 
+namespace markers
+{
+void PRINT_DEBUG(string str)
+{
+    cout << str << endl;
+}
 
 // Point3f rotate_by_z(Point3f p1, Point3f p2){
 //     Point3f p3 = p1;
@@ -37,65 +40,68 @@ void PRINT_DEBUG(string str){
 // }
 cv::Point3f rotate3d(const cv::Point3f inPoint, const cv::Point3f center, cv::Point3f rotation)
 {
-	cv::Point3f point = inPoint - center;
+    cv::Point3f point = inPoint - center;
 
-	float temp = point.y;
+    float temp = point.y;
     point.y = point.y * cos(rotation.x) - point.z * sin(rotation.x);
     point.z = temp * sin(rotation.x) + point.z * cos(rotation.x);
 
-	temp = point.z;
+    temp = point.z;
     point.z = point.z * cos(rotation.y) - point.x * sin(rotation.y);
     point.x = temp * sin(rotation.y) + point.x * cos(rotation.y);
 
-	temp = point.x;
+    temp = point.x;
     point.x = point.x * cos(rotation.z) - point.y * sin(rotation.z);
     point.y = temp * sin(rotation.z) + point.y * cos(rotation.z);
 
-	return center + point;
+    return center + point;
     // cv::Point3f outPoint = inPoint2;
     // //CW rotation
     // // outPoint.x = std::cos(angRad)*inPoint.x - std::sin(angRad)*inPoint.y;
     // // outPoint.y = std::sin(angRad)*inPoint.x + std::cos(angRad)*inPoint.y;
-	//
+    //
     // outPoint.x = ((inPoint.x - inPoint2.x) * cos(a)) - ((inPoint.y - inPoint2.y) * sin(a)) + inPoint2.x;
     // outPoint.y = ((inPoint.x - inPoint2.x) * sin(a)) + ((inPoint.y - inPoint2.y) * cos(a)) + inPoint2.y;
     // return outPoint;
 }
 
 void alignObjPointsToCenter(Mat &obj_points, double &center_x, double &center_y, double &center_z)
-	{
-		// Align object points to the center of mass
-		double sum_x = 0;
-		double sum_y = 0;
-		double sum_z = 0;
+{
+    // Align object points to the center of mass
+    double sum_x = 0;
+    double sum_y = 0;
+    double sum_z = 0;
 
-		for (int i = 0; i < obj_points.rows; i++) {
-			sum_x += obj_points.at<float>(i, 0);
-			sum_y += obj_points.at<float>(i, 1);
-			sum_z += obj_points.at<float>(i, 2);
-		}
+    for (int i = 0; i < obj_points.rows; i++)
+    {
+        sum_x += obj_points.at<float>(i, 0);
+        sum_y += obj_points.at<float>(i, 1);
+        sum_z += obj_points.at<float>(i, 2);
+    }
 
-		center_x = sum_x / obj_points.rows;
-		center_y = sum_y / obj_points.rows;
-		center_z = sum_z / obj_points.rows;
+    center_x = sum_x / obj_points.rows;
+    center_y = sum_y / obj_points.rows;
+    center_z = sum_z / obj_points.rows;
 
-		for (int i = 0; i < obj_points.rows; i++) {
-			obj_points.at<float>(i, 0) -= center_x;
-			obj_points.at<float>(i, 1) -= center_y;
-			obj_points.at<float>(i, 2) -= center_z;
-		}
-	}
+    for (int i = 0; i < obj_points.rows; i++)
+    {
+        obj_points.at<float>(i, 0) -= center_x;
+        obj_points.at<float>(i, 1) -= center_y;
+        obj_points.at<float>(i, 2) -= center_z;
+    }
+}
 
-
-struct Pose{
+struct Pose
+{
     Point3f pose;
     Point3f rotation;
 };
 
-String string_pose(Pose pose){
+String string_pose(Pose pose)
+{
     String str;
     // Strin
-    str +=  "x: " + to_string(pose.pose.x);
+    str += "x: " + to_string(pose.pose.x);
     str += " y: " + to_string(pose.pose.y);
     str += " z: " + to_string(pose.pose.z);
 
@@ -134,7 +140,7 @@ Mat R_flip_gen(double x = 1.0, double y = -1.0, double z = -1.0)
     return _R_flip;
 }
 
-
+} // namespace Markers
 // void Solver{
 // }
 #endif

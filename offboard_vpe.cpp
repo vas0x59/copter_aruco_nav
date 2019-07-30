@@ -26,6 +26,7 @@
 
 using namespace mavsdk;
 using namespace cv;
+using namespace markers;
 
 using std::chrono::milliseconds;
 using std::chrono::seconds;
@@ -37,8 +38,10 @@ using std::this_thread::sleep_for;
 
 // Handles Action's result
 inline void action_error_exit(Action::Result result,
-                              const std::string &message) {
-  if (result != Action::Result::SUCCESS) {
+                              const std::string &message)
+{
+  if (result != Action::Result::SUCCESS)
+  {
     std::cerr << ERROR_CONSOLE_TEXT << message << Action::result_str(result)
               << NORMAL_CONSOLE_TEXT << std::endl;
     exit(EXIT_FAILURE);
@@ -47,8 +50,10 @@ inline void action_error_exit(Action::Result result,
 
 // Handles Offboard's result
 inline void offboard_error_exit(Offboard::Result result,
-                                const std::string &message) {
-  if (result != Offboard::Result::SUCCESS) {
+                                const std::string &message)
+{
+  if (result != Offboard::Result::SUCCESS)
+  {
     std::cerr << ERROR_CONSOLE_TEXT << message << Offboard::result_str(result)
               << NORMAL_CONSOLE_TEXT << std::endl;
     exit(EXIT_FAILURE);
@@ -57,8 +62,10 @@ inline void offboard_error_exit(Offboard::Result result,
 
 // Handles connection result
 inline void connection_error_exit(ConnectionResult result,
-                                  const std::string &message) {
-  if (result != ConnectionResult::SUCCESS) {
+                                  const std::string &message)
+{
+  if (result != ConnectionResult::SUCCESS)
+  {
     std::cerr << ERROR_CONSOLE_TEXT << message << connection_result_str(result)
               << NORMAL_CONSOLE_TEXT << std::endl;
     exit(EXIT_FAILURE);
@@ -66,17 +73,20 @@ inline void connection_error_exit(ConnectionResult result,
 }
 
 // Logs during Offboard control
-inline void offboard_log(const std::string &offb_mode, const std::string msg) {
+inline void offboard_log(const std::string &offb_mode, const std::string msg)
+{
   std::cout << "[" << offb_mode << "] " << msg << std::endl;
 }
 
-uint64_t get_time_usec() {
+uint64_t get_time_usec()
+{
   static struct timeval _time_stamp;
   gettimeofday(&_time_stamp, NULL);
   return _time_stamp.tv_sec * 1000000 + _time_stamp.tv_usec;
 }
 
-void usage(std::string bin_name) {
+void usage(std::string bin_name)
+{
   std::cout << NORMAL_CONSOLE_TEXT << "Usage : " << bin_name
             << " <connection_url>" << std::endl
             << "Connection URL format should be :" << std::endl
@@ -88,8 +98,10 @@ void usage(std::string bin_name) {
             << std::endl;
 }
 
-bool process_vison_vpe(Mat frame, Mat &viz, ArucoMarkersDetector &aruco_detector, Solver &solver) {
+bool process_vison_vpe(Mat frame, Mat &viz, ArucoMarkersDetector &aruco_detector, Solver &solver, std::shared_ptr<mavsdk::MavlinkPassthrough> &mavlink_passthrough)
+{
   frame.copyTo(viz);
+  // std::share
 
   Mat objPoints, imgPoints;
   aruco_detector.detect(frame, objPoints, imgPoints, viz);
@@ -97,7 +109,8 @@ bool process_vison_vpe(Mat frame, Mat &viz, ArucoMarkersDetector &aruco_detector
 
   // cout << objPoints << "img: " << imgPoints << "\n";
   Pose pose;
-  if (solver.solve(objPoints, imgPoints, pose, viz)) {
+  if (solver.solve(objPoints, imgPoints, pose, viz))
+  {
     // std::cout << "Markers not found"<< endl;
     // std::cout << string_pose(pose) << std::endl;
     mavlink_message_t message_vpe;
@@ -119,13 +132,16 @@ bool process_vison_vpe(Mat frame, Mat &viz, ArucoMarkersDetector &aruco_detector
         mavlink_passthrough->get_target_compid(), &message_vpe, &vpe);
 
     mavlink_passthrough->send_message(message_vpe);
-	return true
-  } else {
-    return false
+    return true;
+  }
+  else
+  {
+    return false;
   }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   Mavsdk dc;
   std::string connection_url;
   ConnectionResult connection_result;
@@ -159,15 +175,19 @@ int main(int argc, char **argv) {
       aruco_detector.drawBoard(cv::Size(map_jpeg_size, map_jpeg_size));
   imwrite(map_jpeg, map_img);
 
-  if (argc == 2) {
+  if (argc == 2)
+  {
     connection_url = argv[1];
     connection_result = dc.add_any_connection(connection_url);
-  } else {
+  }
+  else
+  {
     usage(argv[0]);
     return 1;
   }
 
-  if (connection_result != ConnectionResult::SUCCESS) {
+  if (connection_result != ConnectionResult::SUCCESS)
+  {
     std::cout << ERROR_CONSOLE_TEXT << "Connection failed: "
               << connection_result_str(connection_result) << NORMAL_CONSOLE_TEXT
               << std::endl;
@@ -175,7 +195,8 @@ int main(int argc, char **argv) {
   }
 
   // Wait for the system to connect via heartbeat
-  while (!dc.is_connected()) {
+  while (!dc.is_connected())
+  {
     std::cout << "Wait for system to connect via heartbeat" << std::endl;
     sleep_for(seconds(1));
   }
@@ -198,12 +219,13 @@ int main(int argc, char **argv) {
   std::cout << "System is ready" << std::endl;
 
   // Main loop
-  while (waitKey(1) != 'q') {
+  while (waitKey(1) != 'q')
+  {
     Mat frame;
     cap >> frame;
     // cout << "frame w: " << frame.rows << " frame h: " << frame.cols << "\n";
     Mat viz;
-	bool process_vison_vpe_res = process_vison_vpe(frame, viz, aruco_detector, solver);
+    process_vison_vpe(frame, viz, aruco_detector, solver, mavlink_passthrough);
     // else {
     //   // std::cout << "no markers\n";
     //   sleep_for(milliseconds(20));

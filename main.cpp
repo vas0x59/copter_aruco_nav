@@ -6,12 +6,13 @@
 #include <opencv2/aruco.hpp>
 #include "math.h"
 #include "markers/markers.h"
-#include "markers/solver.cpp"
-#include "markers/aruco_markers.cpp"
+#include "markers/solver.h"
+#include "markers/aruco_markers.h"
 // #include "markers/solver.cpp"
 
 using namespace std;
 using namespace cv;
+using namespace Markers;
 
 
 /*
