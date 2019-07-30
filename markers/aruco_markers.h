@@ -38,7 +38,10 @@ struct ArucoMarkerMap
 class ArucoMarkersDetector
 {
 public:
+    ArucoMarkersDetector();
     ArucoMarkersDetector(cv::Ptr<cv::aruco::Dictionary> dictionary);
+
+    void setDictionary(cv::Ptr<cv::aruco::Dictionary> dictionary);
     void addMarker(int id, float size, Point3f point, Point3f rotation);
     void genBoard();
     // void drawMarkers();

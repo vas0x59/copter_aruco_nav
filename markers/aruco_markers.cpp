@@ -115,6 +115,15 @@ ArucoMarkersDetector::ArucoMarkersDetector(cv::Ptr<cv::aruco::Dictionary> dictio
 	_dictionary = dictionary;
 }
 
+ArucoMarkersDetector::ArucoMarkersDetector()
+{
+}
+void ArucoMarkersDetector::setDictionary(cv::Ptr<cv::aruco::Dictionary> dictionary)
+{
+	_dictionary = dictionary;
+}
+
+
 void ArucoMarkersDetector::loadMap(std::string filename)
 {
 	std::ifstream f(filename);
