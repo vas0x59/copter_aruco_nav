@@ -10,9 +10,9 @@
 #include "opencv2/opencv.hpp"
 #include <vector>
 // #include "opencv2/imgproc.hpp"
-#include "markers/aruco_markers.cpp"
+#include "markers/aruco_markers.h"
 #include "markers/markers.h"
-#include "markers/solver.cpp"
+#include "markers/solver.h"
 #include "math.h"
 #include "opencv2/ximgproc.hpp"
 #include <opencv2/aruco.hpp>

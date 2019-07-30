@@ -17,13 +17,19 @@ find_package( MAVSDK REQUIRED )
 
 find_package( OpenCV REQUIRED )
 
-add_executable(
-    offboard_vpe offboard_vpe.cpp
-)
 
-add_library(${PROJECT_NAME}
+
+add_library(markers SHARED
   markers/aruco_markers.cpp
   markers/solver.cpp
+  markers/markers.cpp
+)
+install(
+    TARGETS markers
+    LIBRARY DESTINATION /usr/lib
+)
+add_executable(
+    offboard_vpe offboard_vpe.cpp 
 )
 
 target_link_libraries(offboard_vpe
@@ -32,5 +38,6 @@ target_link_libraries(offboard_vpe
     MAVSDK::mavsdk_telemetry
     MAVSDK::mavsdk_mavlink_passthrough
     MAVSDK::mavsdk
+    /usr/lib/libmarkers.so
     ${OpenCV_LIBS}
 )

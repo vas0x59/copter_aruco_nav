@@ -16,10 +16,13 @@
 //     std::vector<cv::Point2f> points;
 // };
 using namespace cv;
+using namespace cv::aruco;
 // using namespace markers;
 
 namespace markers
 {
+void _drawPlanarBoard(Board *_board, Size outSize, OutputArray _img, int marginSize,
+					  int borderBits);
 
 struct ArucoMarkerMap
 {

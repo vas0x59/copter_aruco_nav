@@ -21,7 +21,7 @@ using namespace markers;
 // namespace markers
 // {
 
-void _drawPlanarBoard(Board *_board, Size outSize, OutputArray _img, int marginSize,
+void markers::_drawPlanarBoard(Board *_board, Size outSize, OutputArray _img, int marginSize,
 					  int borderBits)
 {
 
