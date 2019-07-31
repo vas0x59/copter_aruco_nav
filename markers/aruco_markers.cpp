@@ -214,6 +214,16 @@ Mat ArucoMarkersDetector::drawMarker(int id)
 	return img;
 }
 
+Mat ArucoMarkersDetector::drawBoard(cv::Size size, int marginSize)
+{
+	Mat img;
+	// cv::aruco
+	// cv::aruco::dra
+	_drawPlanarBoard(_board, size, img, marginSize, 1);
+	// cv::aruco::drawMarker(dictionary, id, 0, img);
+	return img;
+}
+
 Mat ArucoMarkersDetector::drawBoard(cv::Size size)
 {
 	Mat img;
@@ -223,6 +233,7 @@ Mat ArucoMarkersDetector::drawBoard(cv::Size size)
 	// cv::aruco::drawMarker(dictionary, id, 0, img);
 	return img;
 }
+
 
 void ArucoMarkersDetector::genBoard()
 {

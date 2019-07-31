@@ -46,6 +46,7 @@ public:
     void genBoard();
     // void drawMarkers();
     Mat drawBoard(cv::Size size);
+    Mat drawBoard(cv::Size size, int marginSize);
     Mat drawMarker(int ids);
     // void drawViz(Mat viz);
 
